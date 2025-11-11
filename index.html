@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SHIELD App Download</title>
+  <link rel="icon" href="shield-logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="card">
+    <img class="logo" src="shield-logo.png" alt="SHIELD Logo" />
+    <h1>SHIELD DOWNLOAD ARCHIVE</h1>
+    <p>Select an app below to view download details and QR code.</p>
+
+    <div class="tiles" role="list">
+      <button class="app-tile" data-app="shield" role="listitem" aria-haspopup="dialog">
+        <img src="shield-logo.png" alt="SHIELD Logo" />
+        <div class="tile-info">
+          <div class="tile-title">SHIELD App</div>
+          <div class="tile-sub">Android • v1.5</div>
+        </div>
+        <div class="tile-action">View</div>
+      </button>
+
+      <button class="app-tile" data-app="auth" role="listitem" aria-haspopup="dialog">
+        <img src="shield-authenticator.png" alt="SHIELD Authenticator Logo" />
+        <div class="tile-info">
+          <div class="tile-title">SHIELD‑Authenticator</div>
+          <div class="tile-sub">Android • v1.5</div>
+        </div>
+        <div class="tile-action">View</div>
+      </button>
+    </div>
+
+    <footer>© 2025 SHIELD Intelligence. All rights resgerved.</footer>
+
+    <!-- hidden templates for modal content -->
+    <template id="tmpl-shield">
+      <h2>SHIELD App v1.5</h2>
+      <p>Welcome to the SHIELD App Access Portal.<br /><span class="highlight">Android only</span> (iOS coming soon).</p>
+      <a class="btn" href="https://download.shieldintelligence.in/SHIELD.apk" download>⬇ Download APK</a>
+      <div class="meta">Size: ~5.1 MB &bull; Updated: 6 September 2025</div>
+      <div class="qr">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=https://download.shieldintelligence.in/SHIELD.apk" alt="QR Code for SHIELD APK Download" />
+        <div class="qr-desc">Scan to download</div>
+      </div>
+    </template>
+
+    <template id="tmpl-auth">
+      <h2>SHIELD‑Authenticator v1.5</h2>
+      <p>Download the SHIELD‑Authenticator app for Android.<br /><span class="highlight">Android only</span></p>
+      <a class="btn" href="https://download.shieldintelligence.in/SHIELD-Authenticator.apk" download>⬇ Download Authenticator APK</a>
+      <div class="meta">Size: ~9.7 MB &bull; Updated: 20 September 2025</div>
+      <div class="qr">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=https://download.shieldintelligence.in/SHIELD-Authenticator.apk" alt="QR Code for SHIELD-Authenticator APK Download" />
+        <div class="qr-desc">Scan to download Authenticator</div>
+      </div>
+    </template>
+
+  </div>
+
+  <!-- Modal -->
+  <div id="modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-panel" role="document">
+      <button class="modal-close" aria-label="Close">✕</button>
+      <div class="modal-body" tabindex="0"></div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const modal = document.getElementById('modal');
+      const body = document.body;
+      const modalBody = modal.querySelector('.modal-body');
+      const closeBtn = modal.querySelector('.modal-close');
+
+      function openApp(app){
+        const tmpl = document.getElementById(app === 'shield' ? 'tmpl-shield' : 'tmpl-auth');
+        if(!tmpl) return;
+        modalBody.innerHTML = '';
+        modalBody.appendChild(tmpl.content.cloneNode(true));
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden','false');
+        // prevent background scroll
+        body.style.overflow = 'hidden';
+        // focus first focusable element in modal
+        const btn = modalBody.querySelector('.btn');
+        if(btn) btn.focus();
+      }
+
+      function closeModal(){
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden','true');
+        body.style.overflow = '';
+        modalBody.innerHTML = '';
+      }
+
+      document.querySelectorAll('.app-tile').forEach(btn => {
+        btn.addEventListener('click', () => openApp(btn.dataset.app));
+      });
+
+      closeBtn.addEventListener('click', closeModal);
+      modal.addEventListener('click', (e) => {
+        if(e.target === modal) closeModal();
+      });
+      document.addEventListener('keydown', (e) => {
+        if(e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+      });
+    })();
+  </script>
+</body>
+</html>

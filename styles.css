@@ -1,0 +1,278 @@
+:root {
+  --bg: #000000;
+  --bg-card: rgba(10, 10, 15, 0.95);
+  --accent: #00ffff;
+  --accent-secondary: #9900ff;
+  --text-main: #e8f9ff;
+  --text-subtle: #c0d3dd;
+  --meta: #5d7f99;
+}
+
+/* Page background with a subtle animated glow */
+html, body {
+  height: 100%;
+}
+
+/* Use grid to easily center the card and avoid page scrolling on wide screens. */
+body {
+  margin: 0;
+  padding: 0; /* moved padding to small-screen media query */
+  min-height: 100vh;
+  background: radial-gradient(1200px 600px at 10% 20%, rgba(0,255,255,0.03), transparent),
+              radial-gradient(800px 400px at 90% 80%, rgba(153,0,255,0.03), transparent),
+              linear-gradient(180deg, #020204 0%, #07060a 100%);
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  color: var(--text-main);
+  display: grid;
+  place-items: center;
+  overflow: hidden; /* default to hide page scrollbar; mobile media query will allow scroll */
+}
+
+.card {
+  background: linear-gradient(180deg, rgba(12,12,16,0.96), rgba(6,6,10,0.96));
+  padding: 38px 34px 30px;
+  border-radius: 16px;
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.6), 0 0 40px rgba(0,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.03);
+  backdrop-filter: blur(6px) saturate(120%);
+  max-width: 840px; /* allow wider layout on large screens */
+  width: min(92%, 820px);
+  text-align: center;
+  position: relative;
+  /* Keep the page itself non-scrollable by using internal scrolling on the card when needed */
+  max-height: calc(100vh - 120px);
+  overflow: auto;
+}
+
+/* Tiles (app list) */
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.app-tile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius: 10px;
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,0.03);
+  cursor: pointer;
+  color: var(--text-main);
+  transition: transform 160ms ease, box-shadow 160ms;
+  text-align: left;
+}
+
+.app-tile img {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.app-tile:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.45);
+}
+
+.tile-info { flex: 1; }
+.tile-title { font-weight: 700; font-size: 15px; }
+.tile-sub { font-size: 12px; color: var(--text-subtle); margin-top: 2px; }
+.tile-action { font-weight: 600; color: var(--accent-secondary); }
+
+/* Modal styles */
+.modal {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(0,0,0,0.6);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms ease;
+  z-index: 60;
+}
+
+.modal.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-panel {
+  background: linear-gradient(180deg, #0a0a0e, #07070a);
+  border-radius: 12px;
+  width: min(92%, 720px);
+  max-height: 88vh;
+  overflow: auto;
+  padding: 20px 20px 24px;
+  box-shadow: 0 18px 60px rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,255,255,0.03);
+  position: relative;
+}
+
+.modal-close {
+  position: absolute;
+  right: 12px;
+  top: 10px;
+  background: transparent;
+  border: none;
+  color: var(--text-main);
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.modal-body h2 { margin-top: 6px; margin-bottom: 8px; color: var(--accent); }
+.modal-body .btn { margin-top: 10px; }
+.modal-body .qr { margin-top: 14px; }
+.modal-body .qr img { width: 180px; }
+
+.highlight { color: #00bfff; font-weight: 600; }
+
+.logo {
+  width: 76px;
+  margin-bottom: 16px;
+  filter: drop-shadow(0 6px 18px rgba(0,255,255,0.06));
+}
+
+h1 {
+  margin: 0 0 8px 0;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: var(--accent);
+  text-shadow: 0 4px 28px rgba(0,255,255,0.04);
+}
+
+p {
+  font-size: 14.5px;
+  color: var(--text-subtle);
+  margin: 6px 0 20px;
+  line-height: 1.56;
+}
+
+.btn {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-secondary) 100%);
+  padding: 12px 0;
+  width: 100%;
+  color: #000;
+  font-weight: 700;
+  font-size: 15.5px;
+  border-radius: 10px;
+  text-decoration: none;
+  box-shadow: 0 6px 22px rgba(0, 255, 255, 0.08), 0 2px 6px rgba(153,0,255,0.06);
+  transition: transform 180ms cubic-bezier(.2,.9,.2,1), box-shadow 180ms;
+  border: none;
+  margin-bottom: 10px;
+  letter-spacing: 0.2px;
+  text-align: center;
+}
+
+.btn:hover,
+.btn:focus {
+  box-shadow: 0 12px 40px rgba(0, 255, 255, 0.12), 0 8px 20px rgba(153,0,255,0.08);
+  transform: translateY(-3px);
+}
+
+.btn:focus-visible {
+  outline: 3px solid rgba(0,255,255,0.09);
+  outline-offset: 2px;
+}
+
+.meta {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #b3eaff;
+  letter-spacing: 0.1px;
+}
+
+.qr {
+  margin-top: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.qr img {
+  width: 112px;
+  border-radius: 10px;
+  border: 1.5px solid #15181c;
+  background: #fff;
+  box-shadow: 0 6px 22px rgba(0,255,255,0.04);
+  transition: box-shadow 200ms ease-in-out, transform 200ms;
+}
+
+.qr img:hover {
+  box-shadow: 0 12px 36px rgba(0,255,255,0.08);
+  transform: translateY(-4px);
+}
+
+.qr-desc {
+  font-size: 11px;
+  color: #8fe3ff;
+  margin-top: 2px;
+  letter-spacing: 0.1px;
+}
+
+footer {
+  margin-top: 26px;
+  font-size: 11px;
+  color: var(--meta);
+  letter-spacing: 0.2px;
+  opacity: 0.9;
+}
+
+.card hr {
+  margin: 28px 0 18px;
+  border: none;
+  border-top: 1.2px solid #22262c;
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 26px 6vw 20px;
+    max-width: 96vw;
+  }
+
+  .qr img {
+    width: 90px;
+  }
+}
+
+/* Allow normal page scrolling and comfortable padding on phones/smaller viewports */
+@media (max-width: 900px) {
+  body {
+    overflow: auto; /* allow the page to scroll on small screens */
+    padding: 28px; /* restore comfortable breathing room on mobile */
+  }
+
+  .card {
+    max-height: none;
+    overflow: visible;
+    width: 100%;
+    max-width: 96vw;
+    border-radius: 12px;
+  }
+}
+
+/* small, subtle animation for ambient glow */
+@keyframes ambientPulse {
+  0% { filter: hue-rotate(0deg) brightness(1); }
+  50% { filter: hue-rotate(10deg) brightness(1.02); }
+  100% { filter: hue-rotate(0deg) brightness(1); }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(400px 200px at 10% 10%, rgba(0,255,255,0.02), transparent),
+              radial-gradient(300px 150px at 90% 90%, rgba(153,0,255,0.02), transparent);
+  mix-blend-mode: screen;
+  animation: ambientPulse 9s ease-in-out infinite;
+}
