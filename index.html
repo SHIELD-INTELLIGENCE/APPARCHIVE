@@ -83,6 +83,24 @@
         if(!tmpl) return;
         modalBody.innerHTML = '';
         modalBody.appendChild(tmpl.content.cloneNode(true));
+        
+        // Update URLs if running from shielddownload.netlify.app
+        if(window.location.hostname === 'shielddownload.netlify.app'){
+          const downloadUrl = app === 'shield' 
+            ? 'https://shielddownload.netlify.app/SHIELD.apk'
+            : 'https://shielddownload.netlify.app/SHIELD-Authenticator.apk';
+          
+          // Update download link
+          const downloadBtn = modalBody.querySelector('.btn');
+          if(downloadBtn) downloadBtn.href = downloadUrl;
+          
+          // Update QR code
+          const qrImg = modalBody.querySelector('.qr img');
+          if(qrImg) {
+            qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(downloadUrl)}`;
+          }
+        }
+        
         modal.classList.add('open');
         modal.setAttribute('aria-hidden','false');
         // prevent background scroll
